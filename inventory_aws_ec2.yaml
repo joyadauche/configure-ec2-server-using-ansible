@@ -2,7 +2,7 @@
 plugin: aws_ec2
 profile: enter-aws-profile
 regions:
-  - ca-central-1
+  - enter-region-code # e.g ca-central-1
 filters:
   tag:Name: dev* # gets all instances that have a `Name` tag that starts with `dev`
   instance-state-name: running # gets all running instances
