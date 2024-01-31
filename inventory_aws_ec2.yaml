@@ -1,0 +1,13 @@
+---
+plugin: aws_ec2
+profile: enter-aws-profile
+regions:
+  - ca-central-1
+filters:
+  tag:Name: dev* # gets all instances that have a `Name` tag that starts with `dev`
+  instance-state-name: running # gets all running instances
+keyed_groups:
+  - key: state.name
+    prefix: instances
+  - key: instance_type
+    prefix: instance_type

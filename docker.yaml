@@ -1,0 +1,46 @@
+---
+- name: Install docker and docker-compose, start docker
+  hosts: instances_running
+  become: yes
+  tasks:
+    - name: install docker
+      yum:
+        name: docker
+        update_cache: yes
+        state: present
+    - name: Install docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: +x
+    - name: Start docker daemon
+      systemd:
+        name: docker
+        state: started
+    - name: Remove python3-requests
+      ansible.builtin.package:
+        name: python3-requests
+        state: absent
+    - name: install pip3
+      yum:
+        name: python3-pip
+        update_cache: yes
+        state: present
+    - name: Install docker and docker-compose python module
+      pip:
+        name:
+          - "docker==6.1.3"
+          - docker-compose
+
+- name: Create new linux user
+  hosts: instances_running
+  become: yes
+  roles:
+    - create_user
+
+- name: Start docker containers
+  hosts: instances_running
+  become: yes
+  become_user: "{{linux_name}}"
+  roles:
+    - start_containers

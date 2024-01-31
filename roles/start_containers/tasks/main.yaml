@@ -1,0 +1,11 @@
+- name: Copy docker compose
+  copy:
+    src: docker-compose.yaml
+    dest: /home/{{linux_name}}/docker-compose.yaml
+- name: Copy .env.development
+  copy:
+    src: .env.development
+    dest: /home/{{linux_name}}/.env.development
+- name: Start containers from compose
+  docker_compose:
+    project_src: /home/{{linux_name}}
